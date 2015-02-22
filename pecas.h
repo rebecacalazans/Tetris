@@ -35,11 +35,76 @@ public:
         return a;
     }
 };
+class sombra
+{
+	qdr q[4];
+	public:
+	void ATUALIZAR(qdr r[4])
+	{
+		APAGA();
+		FORMAR(r);
+	}
+	void FORMAR(qdr r[4])
+	{
+		for(int i=0;i<4;i++)
+		{
+			q[i].x=r[i].x;
+			q[i].y=r[i].y;
+		}
+		while(!DOWN());
+	}
+	int verifica()
+    {
+        int aux=0;
+        for(int i=0; i<4; i++)
+        {
+            if(q[i].y>19||q[i].x<0||q[i].x>9)
+                    aux++;
+            if(q[i].y>0)
+            {
+
+                if(matriz[q[i].y][q[i].x]>0&&matriz[q[i].y][q[i].x]<10)
+                    aux++;
+            }
+        }
+        return aux;
+    }
+    int DOWN()
+    {
+        int aux=0;
+        APAGA();
+        for(int i=0; i<4; i++)
+            q[i]=q[i].DOWN();
+        if(verifica())
+        {
+            for(int i=0; i<4; i++)
+                q[i]=q[i].UP();
+            aux++;
+        }
+        COLOR();
+        return aux;
+    }
+	void APAGA()
+    {
+        for(int i=0; i<4; i++)
+            if(q[i].y>=0&&q[i].y<20&&q[i].x>=0&&q[i].x<10)
+                if(matriz[q[i].y][q[i].x]==8)
+					matriz[q[i].y][q[i].x]=0;
+    }
+	void COLOR()
+    {
+        for(int i=0; i<4; i++)
+            if(q[i].y>=0)
+					if(matriz[q[i].y][q[i].x]==0)
+						matriz[q[i].y][q[i].x]=8;
+    }
+};
 class peca
 {
 protected:
     int cor;
     int posicao; int n_posicao;
+    sombra s;
 public:
 	qdr q[4];
     peca(int a=0, int b=4)
@@ -125,11 +190,12 @@ public:
     }
     void COLOR()
     {
+		s.ATUALIZAR(q);
         for(int i=0; i<4; i++)
             if(q[i].y>=0)
                 matriz[q[i].y][q[i].x]=cor;
     }
-	virtual void FORMAR() {}
+	virtual void FORMAR() {}//Define as possíveis posições das peças
     virtual void GIRAR() // Função valida para 4 posições
     {
         t=0;
