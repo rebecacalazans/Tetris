@@ -631,7 +631,12 @@ void imprimir()
     if(!invisible)
         al_draw_bitmap(quadro[7], 22*30, 30, 0);
     else
-        al_draw_bitmap(quadro[4], 22*30, 30, 0);
+        {
+            al_draw_bitmap(quadro[4], 22*30, 30, 0);
+            for(int i=0; i<4; i++)
+                if(p->q[i].y>=0)
+                al_draw_bitmap(quadro[matriz[p->q[i].y][p->q[i].x]], 150+(p->q[i].x)*30, 90+(p->q[i].y)*30, 0);
+        }
 
     al_flip_display();
 }

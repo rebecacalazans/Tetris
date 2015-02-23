@@ -187,6 +187,7 @@ public:
         for(int i=0; i<4; i++)
             if(q[i].y>=0&&q[i].y<20&&q[i].x>=0&&q[i].x<10)
                 matriz[q[i].y][q[i].x]=0;
+            s.APAGA();
     }
     void COLOR()
     {
