@@ -251,7 +251,6 @@ int main(void)
                     }
                     else if (evento.type == ALLEGRO_EVENT_KEY_DOWN)
                     {
-                        cout << "key down!" << endl;
                         switch(evento.keyboard.keycode)
                         {
                         case ALLEGRO_KEY_UP:
