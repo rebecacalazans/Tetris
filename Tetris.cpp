@@ -240,6 +240,8 @@ int main(void)
                         }
                         */
 
+                        // Verificar se mesmo mudando isso continua funcionando
+                        // normal! Não entendi pra que serve esse [mov]
                         mov++;
                         if(p->DOWN())
                         {
