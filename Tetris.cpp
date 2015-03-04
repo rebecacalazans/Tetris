@@ -3,7 +3,6 @@
 #include <iostream>
 #include <sstream>
 #include <fstream>
-#include <stdbool.h>
 #include <time.h>
 using namespace std;
 
@@ -21,11 +20,13 @@ ALLEGRO_DISPLAY *janela = NULL;
 ALLEGRO_EVENT_QUEUE *fila_eventos = NULL;
 ALLEGRO_TIMER *timer = NULL;
 
-bool sair = false, pause=false, end_game=false, invisible=false;
+bool sair = false, pause_=false, end_game=false, invisible=false;
+
 bool inicializar();
 bool carregarArquivos();
 void finalizar();
 void imprimir();
+
 peca *NOVA(int i)//Gera nova peça
 {
     peca *a;
@@ -55,6 +56,7 @@ peca *NOVA(int i)//Gera nova peça
     }
     return a;
 }
+
 void HOLD()
 {
     if(lim==0)//Se ainda nao tiver trocado a peça
@@ -78,6 +80,7 @@ void HOLD()
         lim=1;
     }
 }
+
 void DELETE_LINHA(int n)//Exclui linha de ordem n
 {
     linha++;
@@ -100,6 +103,7 @@ void DELETE_LINHA(int n)//Exclui linha de ordem n
         matriz[i][j]=0;//Torna o quadro superior vazio
     }
 }
+
 int QUEDA()// Quando a peça cai, verifica as linhas e se o jogo foi perdido
 {
     int cont=0;// conta as linhas tiradas na jogada
@@ -119,7 +123,6 @@ int QUEDA()// Quando a peça cai, verifica as linhas e se o jogo foi perdido
                 cont++;
             }
         }
-
     }
     if(cont)
     {
@@ -156,6 +159,7 @@ int QUEDA()// Quando a peça cai, verifica as linhas e se o jogo foi perdido
     {
         return 1;
     }
+
     delete p;
     p= NOVA(prox);
     atual=prox;
@@ -163,6 +167,7 @@ int QUEDA()// Quando a peça cai, verifica as linhas e se o jogo foi perdido
     lim=0;
     return 0;
 }
+
 void NEW_GAME()
 {
     for(int i=0; i<20; i++)
@@ -171,7 +176,7 @@ void NEW_GAME()
     fase=1;
     linha=0;
     pontuacao=0;
-    pause=false;
+    pause_=false;
     end_game=false;
     hold = 0;
     al_rest(0.1);
@@ -181,6 +186,7 @@ void NEW_GAME()
     prox=rand()%7+1;
     imprimir();
 }
+
 int main(void)
 {
     ifstream leitura ("record.txt");
@@ -207,16 +213,19 @@ int main(void)
 
     while(!sair)
     {
-        if (!al_is_event_queue_empty(fila_eventos))
+        while (!al_is_event_queue_empty(fila_eventos))
         {
             ALLEGRO_EVENT evento;
-            al_wait_for_event(fila_eventos, &evento);
+            //al_wait_for_event(fila_eventos, &evento);
+            al_get_next_event(fila_eventos, &evento);
+
             if(!end_game)
             {
-                if(!pause)
+                if(!pause_)
                 {
                     if (evento.type == ALLEGRO_EVENT_TIMER)
                     {
+                        /*
                         t++;
                         mov++;
                         if(t>=cte/fase)
@@ -229,7 +238,18 @@ int main(void)
                             imprimir();
                             t=0;
                         }
+                        */
 
+                        // Verificar se mesmo mudando isso continua funcionando
+                        // normal! Não entendi pra que serve esse [mov]
+                        mov++;
+                        if(p->DOWN())
+                        {
+                            if(QUEDA())
+                                end_game=true;
+                        }
+                        imprimir();
+                        t=0;
                     }
                     else if (evento.type == ALLEGRO_EVENT_KEY_DOWN)
                     {
@@ -289,7 +309,7 @@ int main(void)
                     if (evento.mouse.x >= 240 &&
                             evento.mouse.x <= 360 && evento.mouse.y >= 270 &&
                             evento.mouse.y <=330)
-                        pause=false;
+                        pause_=false;
                     else if(evento.mouse.x >= 225 &&
                             evento.mouse.x <= 375 && evento.mouse.y >= 270+90&&
                             evento.mouse.y <=330+90)
@@ -311,6 +331,7 @@ int main(void)
                          evento.mouse.y <=420+60 )
                     sair=true;
             }
+
             if (evento.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
             {
                 sair = true;
@@ -342,30 +363,34 @@ int main(void)
                         end_game=true;
                     break;
                 case 7:
-                    if (pause==true)
-                        pause=false;
+                    if (pause_)
+                        pause_=false;
                     else
-                        pause=true;
+                        pause_=true;
                     break;
                 }
                 tecla=0;
             }
             else if(evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)//Se houver click no botão do canto direito, alterna o modo;
-			{
-				if (evento.mouse.x >= 22*30 &&
-                        evento.mouse.x <= 23*30 && evento.mouse.y >= 30 &&
-                        evento.mouse.y <= 60)
-						if(invisible==true)
-							invisible=false;
-						else
-							invisible=true;
-			}
-                imprimir();
+            {
+                if (evento.mouse.x >= 22*30 &&
+                    evento.mouse.x <= 23*30 && evento.mouse.y >= 30 &&
+                    evento.mouse.y <= 60)
+                {
+                      if(invisible==true)
+                          invisible=false;
+                      else
+                          invisible=true;
+                }
+            }
+
+            imprimir();
         }
     }
     finalizar();
     return 0;
 }
+
 bool inicializar()
 {
     if (!al_init())
@@ -400,7 +425,8 @@ bool inicializar()
         cout << "Falha ao criar fila de eventos.\n";
         return false;
     }
-    timer = al_create_timer(0.01);
+
+    timer = al_create_timer(0.01 * cte/fase);
     if (!timer)
     {
         cout << "Falha ao criar timer.\n";
@@ -420,6 +446,7 @@ bool inicializar()
         al_destroy_display(janela);
         return -1;
     }
+
     al_register_event_source(fila_eventos, al_get_keyboard_event_source());
     al_register_event_source(fila_eventos, al_get_display_event_source(janela));
     al_register_event_source(fila_eventos, al_get_mouse_event_source());
@@ -431,10 +458,10 @@ bool inicializar()
 bool carregarArquivos()
 {
     {
-        char imagem[10]="img__.png";
+        char imagem[15]="imgs/img__.png";
         for(int i=0; i<10; i++)
         {
-            imagem[4]=i+48;
+            imagem[9]=i+48;
             quadro[i] = al_load_bitmap(imagem);
             if (!quadro[i])
             {
@@ -444,87 +471,87 @@ bool carregarArquivos()
         }
     }
     {
-        char imagem[10]="obj__.png";
+        char imagem[15]="imgs/obj__.png";
         for(int i=0; i<8; i++)
         {
-            imagem[4]=i+48;
+            imagem[9]=i+48;
             objeto[i] = al_load_bitmap(imagem);
             if (!objeto[i])
             {
-                cout << "Falha ao carregar imagem.\n" << i;
+                cout << "Falha ao carregar imagem: " << imagem << endl;
                 return false;
             }
         }
     }
     {
-        char imagem[10]="num__.png";
+        char imagem[15]="imgs/num__.png";
         for(int i=0; i<10; i++)
         {
-            imagem[4]=i+48;
+            imagem[9]=i+48;
             numero[i] = al_load_bitmap(imagem);
             if (!numero[i])
             {
-                cout << "Falha ao carregar imagem.\n" << i;
+                cout << "Falha ao carregar imagem: " << imagem << endl;
                 return false;
             }
         }
     }
-    numero[10] = al_load_bitmap("num_10.png");
+    numero[10] = al_load_bitmap("imgs/num_10.png");
     if (!numero[10])
     {
         cout << "Falha ao carregar imagem.\n";
         return false;
     }
 
-    nome[0] = al_load_bitmap("tetris.png");
+    nome[0] = al_load_bitmap("imgs/tetris.png");
     if (!nome[0])
     {
         cout << "Falha ao carregar imagem.\n";
         return false;
     }
-    nome[1] = al_load_bitmap("hold.png");
+    nome[1] = al_load_bitmap("imgs/hold.png");
     if (!nome[1])
     {
         cout << "Falha ao carregar imagem.\n";
         return false;
     }
-    nome[2] = al_load_bitmap("next.png");
+    nome[2] = al_load_bitmap("imgs/next.png");
     if (!nome[2])
     {
         cout << "Falha ao carregar imagem.\n";
         return false;
     }
-    nome[3] = al_load_bitmap("score.png");
+    nome[3] = al_load_bitmap("imgs/score.png");
     if (!nome[3])
     {
         cout << "Falha ao carregar imagem.\n";
         return false;
     }
-    nome[4] = al_load_bitmap("pause.png");
+    nome[4] = al_load_bitmap("imgs/pause.png");
     if (!nome[4])
     {
         cout << "Falha ao carregar imagem.\n";
         return false;
     }
-    nome[5] = al_load_bitmap("end_game.png");
+    nome[5] = al_load_bitmap("imgs/end_game.png");
     if (!nome[5])
     {
         cout << "Falha ao carregar imagem.\n";
         return false;
     }
-    nome[6] = al_load_bitmap("best.png");
+    nome[6] = al_load_bitmap("imgs/best.png");
     if (!nome[6])
     {
         cout << "Falha ao carregar imagem.\n";
         return false;
     }
-    nome[7] = al_load_bitmap("level.png");
+    nome[7] = al_load_bitmap("imgs/level.png");
     if (!nome[7])
     {
         cout << "Falha ao carregar imagem.\n";
         return false;
     }
-    nome[8] = al_load_bitmap("goal.png");
+    nome[8] = al_load_bitmap("imgs/goal.png");
     if (!nome[8])
     {
         cout << "Falha ao carregar imagem.\n";
@@ -533,14 +560,16 @@ bool carregarArquivos()
 
     return true;
 }
+
 void finalizar()
 {
     for(int i=0; i<10; i++)
-        al_destroy_bitmap(quadro[i]);
+    al_destroy_bitmap(quadro[i]);
     al_destroy_timer(timer);
     al_destroy_event_queue(fila_eventos);
     al_destroy_display(janela);
 }
+
 void imprimir()
 {
     for(int i=0; i<24; i++)//coloca quadros cinza em toda a tela
@@ -553,6 +582,7 @@ void imprimir()
     al_draw_bitmap(nome[2], 540, 150, 0);//Nome next
     al_draw_bitmap(objeto[prox], 540, 180, 0);//Next
     al_draw_bitmap(nome[7], 1*30, 30*18, 0);//Nome fase
+
     {
         // fase
         al_draw_bitmap(numero[10], 1*30, (19)*30, 0);
@@ -568,6 +598,7 @@ void imprimir()
         for(int i =(n%2==1)? n/2+1 : n/2, j=0; i<n; i++, j++)
             al_draw_bitmap(numero[pt[i]-48], 2*30+15 + j*15, 19*30, 0);
     }
+
     al_draw_bitmap(nome[8], 1*30, 30*15, 0);//Nome goal
     {
         // goal
@@ -624,7 +655,7 @@ void imprimir()
 
 
 
-    if(pause)//Pause menu
+    if(pause_)//Pause menu
         al_draw_bitmap(nome[4], 180, 180, 0);
     if(end_game)//End game menu
         al_draw_bitmap(nome[5], 180, 180, 0);
