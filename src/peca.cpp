@@ -56,7 +56,6 @@ mover_para_baixo(int m[20][10])
   if(verificar_posicao(m))
   {
     colorir(m);
-    std::cout << "a peca foi movida para baixo\n";
     return true;
   }
   else
@@ -64,7 +63,6 @@ mover_para_baixo(int m[20][10])
     for(int i = 0; i < 4; i++)
       y_[i]--;
     colorir(m);
-    std::cout << "a peca nao pode ser movida para baixo\n";
     return false;
   }
 }
