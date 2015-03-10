@@ -7,6 +7,7 @@ class Speca: public Peca
 {
   public:
     Speca(int m[20][10]);
+    Speca(int m[7][7]);
     ~Speca(){};
     void formar();
 };

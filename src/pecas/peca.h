@@ -9,7 +9,9 @@ class Peca
     virtual void formar() = 0;
     void imprimir();
     void apagar(int m[20][10]);
+    void apagar(int m[7][7]);
     void colorir(int m[20][10]);
+    void colorir(int m[7][7]);
     bool verificar_posicao(int m[20][10]);
 
     //Funções de movimento das peças

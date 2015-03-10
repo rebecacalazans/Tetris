@@ -7,6 +7,7 @@ class Tpeca: public Peca
 {
   public:
     Tpeca(int m[20][10]);
+    Tpeca(int m[7][7]);
     ~Tpeca(){};
     void formar();
 };

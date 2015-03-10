@@ -12,6 +12,17 @@ Zpeca(int m[20][10])
         formar();
         colorir(m);
       }
+Zpeca::
+Zpeca(int m[7][7])
+      {
+        cor_ = 5;
+        x_[0] = 3;
+        y_[0] = 3;
+        n_posicoes_ = 2;
+        posicao_ = 0;
+        formar();
+        colorir(m);
+      }
 
 void Zpeca::
 formar()

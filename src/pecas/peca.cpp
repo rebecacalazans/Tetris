@@ -22,10 +22,24 @@ apagar(int m[20][10])
     if(y_[i] >= 0)
       m[y_[i]][x_[i]] = 0;
 }
+void Peca::
+apagar(int m[7][7])
+{
+  for(int i = 0; i < 4; i++)
+    if(y_[i] >= 0)
+      m[y_[i]][x_[i]] = 0;
+}
 
 //Função que cria, na matriz, a peça
 void Peca::
 colorir(int m[20][10])
+{
+  for(int i = 0; i < 4; i++)
+    if(y_[i] >= 0)
+      m[y_[i]][x_[i]] = cor_;
+}
+void Peca::
+colorir(int m[7][7])
 {
   for(int i = 0; i < 4; i++)
     if(y_[i] >= 0)
