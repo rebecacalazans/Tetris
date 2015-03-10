@@ -1,0 +1,8 @@
+#include "peca.h"
+#include "tpeca.h"
+#include "lpeca.h"
+#include "jpeca.h"
+#include "zpeca.h"
+#include "speca.h"
+#include "ipeca.h"
+#include "opeca.h"
