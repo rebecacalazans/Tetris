@@ -1,17 +1,13 @@
 #include <iostream>
+#include <chrono>
+#include <random>
 
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
 
-#include "pecas/peca.h"
-#include "pecas/tpeca.h"
-#include "pecas/lpeca.h"
-#include "pecas/jpeca.h"
-#include "pecas/zpeca.h"
-#include "pecas/speca.h"
-#include "pecas/ipeca.h"
-#include "pecas/opeca.h"
+#include "pecas/pecas.h"
 #include "grafico.h"
+#include "jogo_funcoes.h"
 
 const int largura_tela = 30*22;
 const int altura_tela = 30*24;
@@ -33,6 +29,8 @@ int main(void)
     return -1;
   if (!carregarArquivos())
     return -1;
+  unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+  std::minstd_rand0 generator (seed);//Usar generator()
 
   int matriz_jogo[20][10],
       matriz_hold[7][7],
@@ -44,13 +42,14 @@ int main(void)
 
   iniciar_cores(cor);
 
-  Peca* atual,* next,* hold;
-  atual = new Tpeca(matriz_jogo);
-  next = new Lpeca(matriz_next);
-  hold = new Opeca(matriz_hold);
+  Peca* peca_atual,* peca_next,* peca_hold;
+  peca_atual = nova_peca((generator() % 7 + 1), matriz_jogo);
+  peca_next = nova_peca((generator() % 7 + 1), matriz_next);
+  peca_hold = nova_peca((generator() % 7 + 1), matriz_hold);
+
 
   imprimir(matriz_jogo, matriz_hold, matriz_next);
-  al_rest(10);
+  al_rest(5);
   finalizar();
 }
 
@@ -114,7 +113,7 @@ bool iniciar()
 }
 bool carregarArquivos()
 {
-  img = al_load_bitmap("../img.png");
+  img = al_load_bitmap("img.png");
   if (!img)
   {
     std::cout << "Falha ao carregar imagem.\n";
