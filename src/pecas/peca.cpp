@@ -41,9 +41,20 @@ colorir(int m[20][10])
 void Peca::
 colorir(int m[7][7])
 {
+  x_[0] = 3;
+  y_[0] = 3;
+  formar();
   for(int i = 0; i < 4; i++)
     if(y_[i] >= 0)
       m[y_[i]][x_[i]] = cor_;
+}
+void Peca::
+recriar(int m[20][10])
+{
+  x_[0] = 4;
+  y_[0] = -2;
+  formar();
+  colorir(m);
 }
 
 //Função que verifica se a posição da peça é possível
