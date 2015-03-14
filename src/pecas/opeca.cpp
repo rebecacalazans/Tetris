@@ -4,7 +4,7 @@ Opeca::
 Opeca(int m[20][10])
 //       cor_{7}, x_[0]{4}, y_[0]{-2}, n_posicoes_{4}
       {
-        cor_ = 5;
+        cor_ = 1;
         x_[0] = 4;
         y_[0] = -2;
         n_posicoes_ = 1;
@@ -15,7 +15,7 @@ Opeca(int m[20][10])
 Opeca::
 Opeca(int m[7][7])
       {
-        cor_ = 5;
+        cor_ = 1;
         x_[0] = 3;
         y_[0] = 3;
         n_posicoes_ = 2;
