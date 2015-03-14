@@ -1,3 +1,4 @@
+#include <iostream>
 #include "jogo_funcoes.h"
 
 Peca* nova_peca(int i, int m[20][10])
@@ -59,7 +60,7 @@ Peca* nova_peca(int i, int m[7][7])
   return aux;
 }
 void  hold(int matriz_jogo[20][10], int matriz_hold[7][7], int matriz_next[7][7],
-    Peca* peca_atual ,Peca* peca_hold, Peca* peca_next)
+    Peca* &peca_atual ,Peca* &peca_hold, Peca* &peca_next)
 {
   peca_atual -> apagar(matriz_jogo);
   peca_hold -> apagar(matriz_hold);
@@ -78,9 +79,9 @@ void  hold(int matriz_jogo[20][10], int matriz_hold[7][7], int matriz_next[7][7]
     peca_next = nova_peca(3, matriz_jogo);
   }
 
-  peca_atual -> recriar(matriz_jogo);
-  peca_hold -> colorir(matriz_hold);
-  peca_next -> colorir(matriz_next);
+  peca_atual -> redefinir(matriz_jogo);
+  peca_hold -> criar_imagem(matriz_hold);
+  peca_next -> criar_imagem(matriz_next);
 }
 void excliur_linha(int n, int m[20][10])
 {
