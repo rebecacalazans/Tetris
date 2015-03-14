@@ -12,7 +12,8 @@ class Peca
     void apagar(int m[7][7]);
     void colorir(int m[20][10]);
     void colorir(int m[7][7]);
-    void recriar(int m[20][10]);
+    void redefinir(int m[20][10]);
+    void criar_imagem(int m[7][7]);
     bool verificar_posicao(int m[20][10]);
 
     //Funções de movimento das peças
@@ -25,5 +26,4 @@ class Peca
         cor_, posicao_,
         n_posicoes_;
 };
-
 #endif //PECAS

@@ -7,11 +7,12 @@ Peca(){}
 void Peca::
 imprimir()
 {
+  std::cout << "cor: " << cor_ << std::endl;
   for(int i = 0; i < 4; i++)
   {
-    std::cout << "( " << x_[i] << " ), ( " << y_[i] << " )\n";
+    std::cout << "( " << x_[i] << " , " << y_[i] << " )" << std::endl;
   }
-  std::cout << "\n";
+  std::cout << std::endl;
 }
 
 //Função que apaga, na matriz, a peça
@@ -29,8 +30,6 @@ apagar(int m[7][7])
     if(y_[i] >= 0)
       m[y_[i]][x_[i]] = 0;
 }
-
-//Função que cria, na matriz, a peça
 void Peca::
 colorir(int m[20][10])
 {
@@ -41,18 +40,24 @@ colorir(int m[20][10])
 void Peca::
 colorir(int m[7][7])
 {
-  x_[0] = 3;
-  y_[0] = 3;
   formar();
   for(int i = 0; i < 4; i++)
     if(y_[i] >= 0)
       m[y_[i]][x_[i]] = cor_;
 }
 void Peca::
-recriar(int m[20][10])
+redefinir(int m[20][10])
 {
   x_[0] = 4;
   y_[0] = -2;
+  formar();
+  colorir(m);
+}
+void Peca::
+criar_imagem(int m[7][7])
+{
+  x_[0] = 3;
+  y_[0] = 3;
   formar();
   colorir(m);
 }
@@ -138,30 +143,15 @@ girar(int m[20][10])
   bool aux;
   apagar(m);
   if(++posicao_ >= n_posicoes_) posicao_ = 0;
+  formar();
 
   if(verificar_posicao(m))
-  {
     aux = true;
-    goto formacao;
-  }
-  if(mover_para_esquerda(m))
+  else
   {
-    aux = true;
-    goto formacao;
+    if(--posicao_ < 0) posicao_ = n_posicoes_ - 1;
+    aux = false;
   }
-  if(mover_para_direita(m))
-  {
-    aux = true;
-    goto formacao;
-  }
-  if(mover_para_baixo(m))
-  {
-    aux = true;
-    goto formacao;
-  }
-  if(--posicao_ < 0) posicao_ = n_posicoes_ - 1;
-  aux = false;
-formacao:
   formar();
   colorir(m);
   return aux;
