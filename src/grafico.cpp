@@ -20,7 +20,6 @@ void imprimir_matriz_jogo(ALLEGRO_COLOR cor[10], ALLEGRO_BITMAP* img, float x, f
     {
       al_draw_tinted_bitmap(img, cor[matriz[i][j]], x + j * 30,y + i * 30, 0);
     }
-  al_flip_display();
 }
 
 void imprimir_matriz_peca(ALLEGRO_COLOR cor[10],ALLEGRO_BITMAP* img, float x, float y, int matriz[7][7])
@@ -32,7 +31,6 @@ void imprimir_matriz_peca(ALLEGRO_COLOR cor[10],ALLEGRO_BITMAP* img, float x, fl
       else
       al_draw_tinted_scaled_bitmap (img, cor[matriz[i][j]], 0,  0, 30, 30, x + j * 15,y + i * 15, 15, 15, 6);
     }
-  al_flip_display();
 }
 
 void iniciar_cores(ALLEGRO_COLOR cor[10])
