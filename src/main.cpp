@@ -47,6 +47,40 @@ int main(void)
   peca_next = nova_peca((generator() % 7 + 1), matriz_next);
   peca_hold = nova_peca((generator() % 7 + 1), matriz_hold);
 
+  imprimir(matriz_jogo, matriz_hold, matriz_next);
+
+  while(true)
+  {
+    while (!al_is_event_queue_empty(fila_eventos))
+    {
+      ALLEGRO_EVENT evento;
+      al_get_next_event(fila_eventos, &evento);
+
+      if(evento.type == ALLEGRO_EVENT_KEY_DOWN)
+      {
+        switch(evento.keyboard.keycode)
+        {
+          case ALLEGRO_KEY_UP:
+            peca_atual -> girar(matriz_jogo);
+            break;
+          case ALLEGRO_KEY_DOWN:
+            peca_atual -> mover_para_baixo(matriz_jogo);
+            break;
+          case ALLEGRO_KEY_LEFT:
+            peca_atual -> mover_para_esquerda(matriz_jogo);
+            break;
+          case ALLEGRO_KEY_RIGHT:
+            peca_atual -> mover_para_direita(matriz_jogo);
+            break;
+          case ALLEGRO_KEY_C:
+            hold(matriz_jogo, matriz_hold, matriz_next,
+                peca_atual, peca_hold, peca_next);
+            break;
+        }
+      }
+      imprimir(matriz_jogo, matriz_hold, matriz_next);
+    }
+  }
 
   imprimir(matriz_jogo, matriz_hold, matriz_next);
   al_rest(5);
