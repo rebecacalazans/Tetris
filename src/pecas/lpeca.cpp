@@ -17,7 +17,7 @@ Lpeca(int m[7][7])
         cor_ = 4;
         x_[0] = 3;
         y_[0] = 3;
-        n_posicoes_ = 2;
+        n_posicoes_ = 4;
         posicao_ = 0;
         formar();
         colorir(m);

@@ -142,17 +142,20 @@ girar(int m[20][10])
 {
   bool aux;
   apagar(m);
-  if(++posicao_ >= n_posicoes_) posicao_ = 0;
+  posicao_ = (posicao_ + 1) % n_posicoes_;
+
   formar();
 
   if(verificar_posicao(m))
     aux = true;
   else
   {
-    if(--posicao_ < 0) posicao_ = n_posicoes_ - 1;
+    posicao_ = (posicao_ + n_posicoes_ - 1) % n_posicoes_;
     aux = false;
   }
+
   formar();
   colorir(m);
+
   return aux;
 }
